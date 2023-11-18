@@ -26,7 +26,7 @@ stages:
       displayName: 'Build and push Docker image'
       inputs:
         command: 'buildAndPush'
-        containerRegistry: '$(AcrServiceConnection)'  # Fix casing here
+        containerRegistry: '$(AcrServiceConnection)'
         repository: 'testing'
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
@@ -52,11 +52,18 @@ stages:
     displayName: 'Deploy to AKS'
     steps:
     - checkout: self
-    - task: AzureKubernetesService@1
+    - task: AzureCLI@2
+      displayName: 'Azure CLI Login'
+      inputs:
+        azureSubscription: '$(AksServiceConnection)'
+        scriptType: 'bash'
+        scriptLocation: 'inline'
+        inlineScript: 'az aks get-credentials --resource-group $(acrResourceGroup) --name $(aksCluster)'
+
+    - task: KubernetesManifest@0
       displayName: 'Deploy to AKS'
       inputs:
-        azureSubscriptionEndpoint: '$(AksServiceConnection)'  # Fix casing here
-        aksCluster: '$(aksCluster)'
-        command: 'kubectl'
-        arguments: |
-          apply -f $(Build.SourcesDirectory)/k8s/deployment.yaml
+        action: 'deploy'
+        kubernetesServiceConnection: '$(AksServiceConnection)'
+        manifests: '$(Build.SourcesDirectory)/k8s/deployment.yaml'
+        containers: 'my-app-container'  # Replace with your container name
