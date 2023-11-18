@@ -16,6 +16,6 @@ spec:
       - name: testing  # Name of the secret you created
       containers:
       - name: test
-        image: myacrferfefd345.azurecr.io/test:$(Build:BuildId) # Replace with your image details
+        image: myacrferfefd345.azurecr.io/test:$(Build.BuildId) # Replace with your image details
         ports:
         - containerPort: 80
