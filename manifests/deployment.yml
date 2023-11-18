@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: bagadockerreactjs 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bagadockerreactjs
+  template:
+    metadata:
+      labels:
+        app: bagadockerreactjs 
+    spec:
+      containers:
+        - name: bagadockerreactjs 
+          image: myacrferfefd345.azurecr.io/bagadockerreactjs
+          ports:
+          - containerPort: 80
