@@ -55,7 +55,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'Azure CLI Login'
       inputs:
-        azureSubscription: '$(AksServiceConnection)'
+        azureSubscription: '$(AcrServiceConnection)'  # Use AzureRM service connection
         scriptType: 'bash'
         scriptLocation: 'inline'
         inlineScript: 'az aks get-credentials --resource-group $(acrResourceGroup) --name $(aksCluster)'
