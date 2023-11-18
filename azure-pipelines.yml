@@ -44,26 +44,26 @@ stages:
         PathtoPublish: deployment/deployment.yaml
       
           
-- stage: DeployToAKS
-  displayName: 'Deploy to AKS'
-  dependsOn: BuildAndPush
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy to AKS'
-    steps:
-    - checkout: self
-    - task: AzureCLI@2
-      displayName: 'Azure CLI Login'
-      inputs:
-        azureSubscription: '$(AcrServiceConnection)'  # Use AzureRM service connection
-        scriptType: 'bash'
-        scriptLocation: 'inline'
-        inlineScript: 'az aks get-credentials --resource-group $(acrResourceGroup) --name $(aksCluster)'
+# - stage: DeployToAKS
+#   displayName: 'Deploy to AKS'
+#   dependsOn: BuildAndPush
+#   jobs:
+#   - job: Deploy
+#     displayName: 'Deploy to AKS'
+#     steps:
+#     - checkout: self
+#     - task: AzureCLI@2
+#       displayName: 'Azure CLI Login'
+#       inputs:
+#         azureSubscription: '$(AcrServiceConnection)'  # Use AzureRM service connection
+#         scriptType: 'bash'
+#         scriptLocation: 'inline'
+#         inlineScript: 'az aks get-credentials --resource-group $(acrResourceGroup) --name $(aksCluster)'
 
-    - task: KubernetesManifest@0
-      displayName: 'Deploy to AKS'
-      inputs:
-        action: 'deploy'
-        kubernetesServiceConnection: '$(AksServiceConnection)'
-        manifests: '$(Build.SourcesDirectory)/k8s/deployment.yaml'
-        containers: 'my-app-container'  # Replace with your container name
+#     - task: KubernetesManifest@0
+#       displayName: 'Deploy to AKS'
+#       inputs:
+#         action: 'deploy'
+#         kubernetesServiceConnection: '$(AksServiceConnection)'
+#         manifests: '$(Build.SourcesDirectory)/k8s/deployment.yaml'
+#         containers: 'my-app-container'  # Replace with your container name
