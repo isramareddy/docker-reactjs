@@ -28,9 +28,9 @@ stages:
         SonarQube: 'sonar-connection'  # Add your SonarQube service connection name
         scannerMode: 'CLI'
         configMode: 'manual'
-        cliProjectKey: 'testingsonar123'
-        cliSources: '$(Build.SourcesDirectory)'
-        nodeJSVersion: '10.x'  # Specify a version that works with SonarQube tasks
+        cliProjectKey: 'checkkar114'
+        #cliSources: '$(Build.SourcesDirectory)'
+        #nodeJSVersion: '10.x'  # Specify a version that works with SonarQube tasks
 
     # Your existing SonarQube Analysis steps
     - task: SonarQubeAnalyze@4
