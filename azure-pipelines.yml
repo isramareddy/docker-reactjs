@@ -6,12 +6,12 @@ pool:
 
 variables:
   # Azure Container Registry (ACR) settings
-  acrName: 'myacrferfefd'
-  acrResourceGroup: 'rg_testing_terraform'
+  #acrName: 'myacrferfefd'
+  #acrResourceGroup: 'rg_testing_terraform'
   acrServiceConnection: 'acr-connection'
   sonarServiceConnection: 'sonar-connection'
   # Azure Kubernetes Service (AKS) settings
-  aksCluster: 'testcheck'
+  #aksCluster: 'testcheck'
   aksServiceConnection: 'aks-connection'
 
 stages:
