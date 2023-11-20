@@ -29,8 +29,8 @@ stages:
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: 'checkkar114'
-        #cliSources: '$(Build.SourcesDirectory)'
-        #nodeJSVersion: '10.x'  # Specify a version that works with SonarQube tasks
+        cliSources: '$(Build.SourcesDirectory)'
+        nodeJSVersion: '10.x'  # Specify a version that works with SonarQube tasks
 
     # Your existing SonarQube Analysis steps
     - task: SonarQubeAnalyze@4
