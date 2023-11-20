@@ -28,15 +28,10 @@ stages:
         SonarQube: 'sonar-connection'  # Add your SonarQube service connection name
         scannerMode: 'CLI'
         configMode: 'manual'
-        cliProjectKey: 'checkkar114'
-        cliSources: '$(Build.SourcesDirectory)'
-        nodeJSVersion: '10.x'  # Specify a version that works with SonarQube tasks
+        cliProjectKey: 'testingsonar123'
 
     # Your existing SonarQube Analysis steps
     - task: SonarQubeAnalyze@4
-    - task: SonarQubePublish@4
-      inputs:
-        pollingTimeoutSec: '300'
 
 - stage: BuildAndPush
   displayName: 'Build and Push to ACR'
