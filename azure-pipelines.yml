@@ -20,19 +20,33 @@ stages:
     # SonarQube Prepare Analysis Configuration
     - task: SonarQubePrepare@4
       inputs:
-        SonarQube: 'sonar-connection'  # Add your SonarQube service connection name
+        SonarQube: 'sonar-connection'
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: 'testingsonar123'
 
-    # Your existing SonarQube Analysis steps
-    - task: SonarQubeAnalyze@4
+- stage: SonarQualityGateCheck
+  jobs:
+  - job: SonarQualityGateCheckJob
+    displayName: 'Sonar Quality Gate Check'
+    dependsOn: PublishQualityGate
+    steps:
+    - checkout: self
 
-    # SonarQube Quality Gate Check
-    - task: SonarQubeCheck@4
-      inputs:
-        SonarQube: 'sonar-connection'  # Add your SonarQube service connection name
-        projectKey: 'testingsonar123'
+    # Run SonarQube quality gate check using Bash script
+    - script: |
+        sonarQubeUrl="http://20.15.204.13:9000"
+        projectKey="testingsonar123"
+        
+        qualityGateStatus=$(curl -s "$sonarQubeUrl/api/qualitygates/project_status?projectKey=$projectKey" | jq -r '.projectStatus.status')
+        
+        if [ "$qualityGateStatus" != "OK" ]; then
+          echo "SonarQube quality gate check failed."
+          exit 1
+        fi
+        
+        echo "SonarQube quality gate check passed."
+      displayName: 'Run SonarQube Quality Gate Check'
 
 - stage: BuildAndPush
   displayName: 'Build and Push to ACR'
@@ -61,28 +75,3 @@ stages:
       displayName: 'Publish Artifact: drop'
       inputs:
         PathtoPublish: deployment/deployment.yaml
-
-# Uncomment the following section if you want to deploy to AKS
-# - stage: DeployToAKS
-#   displayName: 'Deploy to AKS'
-#   dependsOn: BuildAndPush
-#   jobs:
-#   - job: Deploy
-#     displayName: 'Deploy to AKS'
-#     steps:
-#     - checkout: self
-#     - task: AzureCLI@2
-#       displayName: 'Azure CLI Login'
-#       inputs:
-#         azureSubscription: '$(AcrServiceConnection)'  # Use AzureRM service connection
-#         scriptType: 'bash'
-#         scriptLocation: 'inline'
-#         inlineScript: 'az aks get-credentials --resource-group $(acrResourceGroup) --name $(aksCluster)'
-
-#     - task: KubernetesManifest@0
-#       displayName: 'Deploy to AKS'
-#       inputs:
-#         action: 'deploy'
-#         kubernetesServiceConnection: '$(AksServiceConnection)'
-#         manifests: '$(Build.SourcesDirectory)/k8s/deployment.yaml'
-#         containers: 'my-app-container'  # Replace with your container name
