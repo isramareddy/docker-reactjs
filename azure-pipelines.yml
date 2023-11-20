@@ -28,6 +28,12 @@ stages:
     # Your existing SonarQube Analysis steps
     - task: SonarQubeAnalyze@4
 
+    # SonarQube Quality Gate Check
+    - task: SonarQubeCheck@4
+      inputs:
+        SonarQube: 'sonar-connection'  # Add your SonarQube service connection name
+        projectKey: 'testingsonar123'
+
 - stage: BuildAndPush
   displayName: 'Build and Push to ACR'
   jobs:
