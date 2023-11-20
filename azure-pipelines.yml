@@ -8,6 +8,7 @@ variables:
   acrServiceConnection: 'acr-connection'
   sonarServiceConnection: 'sonar-connection'
   aksServiceConnection: 'aks-connection'
+  group: sonarlogin
 
 stages:
 - stage: Analysis
@@ -23,7 +24,7 @@ stages:
         SonarQube: 'sonar-connection'
         scannerMode: 'CLI'
         configMode: 'manual'
-        cliProjectKey: 'testingsonar123'
+        cliProjectKey: '$(ProjectKey)'
 
 - stage: SonarQualityGateCheck
   jobs:
@@ -35,8 +36,8 @@ stages:
     # Run SonarQube quality gate check using Bash script
     - script: |
         set -x
-        username="admin"
-        password="test"
+        username="$(username)"
+        password=$(password)"
 
         base64AuthInfo=$(echo -n "$username:$password" | base64)
 
@@ -44,7 +45,7 @@ stages:
             "Authorization: Basic $base64AuthInfo"
         )
 
-        projectKey="testingsonar123"
+        projectKey='$(ProjectKey)'
         branch="master"
         apiUrl="http://20.15.204.13:9000/api/qualitygates/project_status?projectKey=$projectKey&branch=$branch"
 
