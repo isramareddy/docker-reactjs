@@ -62,7 +62,7 @@ stages:
     - checkout: self
 
     # Run SonarQube quality gate check
-    - task: SonarQubeCheck@4
+    - task: SonarQualityGateCheck
       inputs:
         SonarQube: 'sonar-connection'  # Add your SonarQube service connection name
         projectKey: 'testingsonar123'
