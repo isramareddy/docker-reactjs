@@ -36,9 +36,15 @@ stages:
 
 - stage: PublishQualityGate
   jobs:
+  - job: DummyJob
+    displayName: 'Dummy Job'
+    steps:
+    - checkout: self
+    - script: echo "This is a dummy job, used to satisfy the stage dependency requirements."
+
   - job: PublishQualityGateJob
     displayName: 'Publish Quality Gate Result'
-    dependsOn: Analysis
+    dependsOn: DummyJob
     steps:
     - checkout: self
 
@@ -113,4 +119,3 @@ stages:
 #         kubernetesServiceConnection: '$(AksServiceConnection)'
 #         manifests: '$(Build.SourcesDirectory)/k8s/deployment.yaml'
 #         containers: 'my-app-container'  # Replace with your container name
-
