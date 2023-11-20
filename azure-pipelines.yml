@@ -35,18 +35,26 @@ stages:
     # Run SonarQube quality gate check using Bash script
     - script: |
         set -x
-        sonarQubeUrl="http://20.15.204.13:9000/api/qualitygates/project_status?projectKey=testingsonar123"
-        projectKey="testingsonar123"
-        
-        qualityGateStatus=$(curl -s "$sonarQubeUrl/api/qualitygates/project_status?projectKey=$projectKey" | jq -r '.projectStatus.status')
-        
-        if [ "$qualityGateStatus" != "OK" ]; then
-          echo "SonarQube quality gate check failed."
-          exit 1
-        fi
-        
-        echo "SonarQube quality gate check passed."
-      displayName: 'Run SonarQube Quality Gate Check'
+        $username = admin
+        $password = test
+
+        $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$(username):$(password)"))
+
+        $headers = @{
+            Authorization = "Basic $base64AuthInfo"
+        }
+
+        $projectKey = "testingsonar123"
+        $branch = "master" 
+        $apiUrl = "http://20.15.204.13:9000/api/qualitygates/project_status?projectKey=$projectKey&branch=$branch"
+
+        $result = Invoke-RestMethod -Method Get -Uri $apiUrl -Headers $headers
+
+        if ($result.projectStatus.status -eq "OK") {
+            Write-Host "Quality Gate Succeeded"
+        } else {
+            throw "Quality gate failed"
+        }
 
 - stage: BuildAndPush
   displayName: 'Build and Push to ACR'
