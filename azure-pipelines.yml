@@ -29,7 +29,6 @@ stages:
   jobs:
   - job: SonarQualityGateCheckJob
     displayName: 'Sonar Quality Gate Check'
-    dependsOn: PublishQualityGate
     steps:
     - checkout: self
 
