@@ -37,7 +37,7 @@ stages:
     - script: |
         set -x
         username="$(username)"
-        password=$(password)"
+        password="$(password)"
 
         base64AuthInfo=$(echo -n "$username:$password" | base64)
 
@@ -45,7 +45,7 @@ stages:
             "Authorization: Basic $base64AuthInfo"
         )
 
-        projectKey='$(ProjectKey)'
+        projectKey="$(ProjectKey)"
         branch="master"
         apiUrl="http://20.15.204.13:9000/api/qualitygates/project_status?projectKey=$projectKey&branch=$branch"
 
