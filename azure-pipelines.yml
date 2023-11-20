@@ -5,10 +5,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  acrServiceConnection: 'acr-connection'
-  sonarServiceConnection: 'sonar-connection'
-  aksServiceConnection: 'aks-connection'
-  group: sonarlogin
+- group: sonarlogin
+- name: acrServiceConnection
+  value: 'acr-connection'
+- name: sonarServiceConnection
+  value: 'sonar-connection'
+- name: aksServiceConnection
+  value: 'aks-connection'
 
 stages:
 - stage: Analysis
@@ -21,7 +24,7 @@ stages:
     # SonarQube Prepare Analysis Configuration
     - task: SonarQubePrepare@4
       inputs:
-        SonarQube: 'sonar-connection'
+        SonarQube: '$(sonarServiceConnection)'
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: '$(ProjectKey)'
