@@ -45,7 +45,7 @@ stages:
 
 - job: Deploy
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'ubuntu-latest'
   steps:
   - task: AzureCLI@2
     inputs:
