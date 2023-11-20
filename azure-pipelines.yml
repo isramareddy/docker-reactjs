@@ -42,8 +42,19 @@ stages:
       displayName: 'Publish Artifact: drop'
       inputs:
         PathtoPublish: deployment/deployment.yaml
-      
-          
+
+- job: Deploy
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '<Name of your Azure subscription service connection>'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Your Azure CLI commands here
+
 # - stage: DeployToAKS
 #   displayName: 'Deploy to AKS'
 #   dependsOn: BuildAndPush
