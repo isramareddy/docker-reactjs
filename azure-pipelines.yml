@@ -60,3 +60,7 @@ stages:
             echo "Quality gate failed"
             exit 1
         fi
+
+
+
+        #jhkh
