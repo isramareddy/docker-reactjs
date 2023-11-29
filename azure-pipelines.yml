@@ -1,3 +1,5 @@
+pool:
+  vmImage: 'ubuntu-latest'
 - stage: SonarQualityGateCheck
   jobs:
   - job: SonarQualityGateCheckJob
