@@ -1,5 +1,7 @@
 pool:
   vmImage: 'ubuntu-latest'
+
+stages:
 - stage: SonarQualityGateCheck
   jobs:
   - job: SonarQualityGateCheckJob
@@ -11,8 +13,6 @@ pool:
     - script: |
         pwd
 
-trigger:
-- master
 
 # pool:
 #   vmImage: 'ubuntu-latest'
