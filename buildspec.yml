@@ -10,6 +10,7 @@ phases:
       - echo 'Build Phase'
       - echo 'Checking out source code'
       # Add your build commands here
+      docker build 
   post_build:
     commands:
       - echo 'Post Build Phase'
