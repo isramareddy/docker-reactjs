@@ -1,21 +1,25 @@
-version: 0.2
-
-phases:
+version: 0.2phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - npm install -g typescript
+      - npm install
   pre_build:
     commands:
-      - echo 'Pre Build Phase'
-      # Add any pre-build commands here
+      - echo Installing source NPM dependencies...
   build:
     commands:
-      - echo 'Build Phase'
-      - echo 'Checking out source code'
-      # Add your build commands here
-      docker build 
-  post_build:
-    commands:
-      - echo 'Post Build Phase'
-      # Add any post-build commands here
-
+      - echo Build started on `date`
+      - tsc
+      - npm prune --production
+    post_build:
+      commands:
+        - echo Build completed on `date`  
 artifacts:
-  files: '**/*'
-  discard-paths: yes
+  type: zip
+  files:
+    - package.json
+    - package-lock.json
+    - "build/**/*"
+    - .ebextensions/**/*
