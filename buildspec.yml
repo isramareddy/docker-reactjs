@@ -12,11 +12,11 @@ phases:
 
       # Docker commands
       - echo Building Docker image...
-      - docker build -t your-docker-image-name .
-      - echo Logging in to Docker Hub...
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - echo Pushing Docker image to Docker Hub...
-      - docker push your-docker-image-name
+      - docker build -t your-docker-image-name . -t -d
+      - #echo Logging in to Docker Hub...
+      - #echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - #echo Pushing Docker image to Docker Hub...
+      - #docker push your-docker-image-name
 
   post_build:
     commands:
