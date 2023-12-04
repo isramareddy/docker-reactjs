@@ -1,31 +1,25 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      docker: 18
+
   pre_build:
     commands:
-      - echo Installing source NPM dependencies...
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
   build:
     commands:
-      - echo Build started on `date`
-      - npm prune --production
-
-      # Docker commands
       - echo Building Docker image...
-      - docker build -t testing . 
-      - #echo Logging in to Docker Hub...
-      - #echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - #echo Pushing Docker image to Docker Hub...
-      - #docker push your-docker-image-name
+      - docker build -t $400926585409.dkr.ecr.us-east-1.amazonaws.com/reactapp:latest .
+      - docker push $400926585409.dkr.ecr.us-east-1.amazonaws.com/reactapp:latest
 
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo Deploying to Kubernetes...
+      - kubectl apply -f kubernetes-manifests/
 
-# artifacts:
-#   type: zip
-#   files:
-#     - package.json
-#     - package-lock.json
-#     - "build/**/*"
-#     - .ebextensions/**/*
+artifacts:
+  files: '*'
