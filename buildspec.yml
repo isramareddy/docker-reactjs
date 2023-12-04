@@ -1,17 +1,19 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      java: corretto11
+  pre_build:
+    commands:
+      - echo 'Pre Build Phase'
+      # Add any pre-build commands here
   build:
     commands:
-      - echo Build started on `date`
-      - echo Compiling the Java code...
+      - echo 'Build Phase'
+      - echo 'Checking out source code'
       # Add your build commands here
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo 'Post Build Phase'
+      # Add any post-build commands here
 
 artifacts:
   files: '**/*'
