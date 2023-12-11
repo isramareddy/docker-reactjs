@@ -11,69 +11,6 @@ variables:
     value: 'aks-connection'
 
 stages:
-- stage: SonarQualityGateCheck
-  jobs:
-  - job: SonarQualityGateCheckJob
-    displayName: 'Sonar Quality Gate Check'
-    steps:
-    - checkout: self
-
-    # Run SonarQube quality gate check using Bash script
-    - script: |
-        pwd
-
-
-# pool:
-#   vmImage: 'ubuntu-latest'
-
-# stages:
-# - stage: Analysis
-#   jobs:
-#   - job: AnalysisJob
-#     displayName: 'Run Analysis'
-#     steps:
-#     - checkout: self
-
-#     # SonarQube Prepare Analysis Configuration
-#     - task: SonarQubePrepare@4
-#       inputs:
-#         SonarQube: '$(sonarServiceConnection)'
-#         scannerMode: 'CLI'
-#         configMode: 'manual'
-#         cliProjectKey: '$(ProjectKey)'
-
-# - stage: SonarQualityGateCheck
-#   jobs:
-#   - job: SonarQualityGateCheckJob
-#     displayName: 'Sonar Quality Gate Check'
-#     steps:
-#     - checkout: self
-
-#     # Run SonarQube quality gate check using Bash script
-#     - script: |
-#         set -x
-#         username="$(username)"
-#         password="$(password)"
-
-#         base64AuthInfo=$(echo -n "$username:$password" | base64)
-
-#         headers=(
-#             "Authorization: Basic $base64AuthInfo"
-#         )
-
-#         projectKey="$(ProjectKey)"
-#         branch="master"
-#         apiUrl="http://20.15.204.13:9000/api/qualitygates/project_status?projectKey=$projectKey&branch=$branch"
-
-#         result=$(curl -s -H "${headers[@]}" "$apiUrl")
-
-#         if [[ $(echo "$result" | jq -r .projectStatus.status) == "OK" ]]; then
-#             echo "Quality Gate Succeeded"
-#         else
-#             echo "Quality gate failed"
-#             exit 1
-#         fi
-
 - stage: BuildAndPush
   displayName: 'Build and Push to ACR'
   jobs:
@@ -88,8 +25,6 @@ stages:
         containerRegistry: '$(AcrServiceConnection)'
         repository: 'testing'
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(Build.BuildId)
 
     - task: CopyFiles@2
       displayName: 'Copy Files to: drop'
